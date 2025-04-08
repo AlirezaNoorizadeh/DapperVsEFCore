@@ -24,15 +24,15 @@ if (app.Environment.IsDevelopment())
 }
 
 #region EFCORE API
-var studentEFGroup = app.MapGroup("/EfCore/students");
+var studentEFGroup = app.MapGroup("/EfCore/students").WithTags("EF Core");
 
-studentEFGroup.MapGet("", async (IStudentRepository studentRepository) =>
+studentEFGroup.MapGet("/GetAll", async (IStudentRepository studentRepository) =>
 {
     var result = await studentRepository.EFGetAllAsync();
     return TypedResults.Ok(result);
 });
 
-studentEFGroup.MapGet("/{studentId}", async Task<Results<Ok<Student>, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
+studentEFGroup.MapGet("/ReadById/{studentId}", async Task<Results<Ok<Student>, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
 {
     try
     {
@@ -46,14 +46,14 @@ studentEFGroup.MapGet("/{studentId}", async Task<Results<Ok<Student>, BadRequest
     }
 });
 
-studentEFGroup.MapPost("", async (Student student, IStudentRepository studentRepository) =>
+studentEFGroup.MapPost("/Create", async (Student student, IStudentRepository studentRepository) =>
 {
     await studentRepository.EFCreateAsync(student);
 
     return TypedResults.Ok();
 });
 
-studentEFGroup.MapPut("", async Task<Results<Ok, BadRequest<string>>> (Student student, IStudentRepository studentRepository) =>
+studentEFGroup.MapPut("/Update", async Task<Results<Ok, BadRequest<string>>> (Student student, IStudentRepository studentRepository) =>
 {
     try
     {
@@ -67,7 +67,7 @@ studentEFGroup.MapPut("", async Task<Results<Ok, BadRequest<string>>> (Student s
     }
 });
 
-studentEFGroup.MapDelete("/{studentId}", async Task<Results<Ok, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
+studentEFGroup.MapDelete("/Delete/{studentId}", async Task<Results<Ok, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
 {
     try
     {
@@ -85,15 +85,15 @@ studentEFGroup.MapDelete("/{studentId}", async Task<Results<Ok, BadRequest<strin
 
 #region Dapper API
 
-var studentDapperGroup = app.MapGroup("/dapper/students");
+var studentDapperGroup = app.MapGroup("/dapper/students").WithTags("Dapper");
 
-studentDapperGroup.MapGet("", async (IStudentRepository studentRepository) =>
+studentDapperGroup.MapGet("/GetAll", async (IStudentRepository studentRepository) =>
 {
     var result = await studentRepository.DapperGetAllAsync();
     return TypedResults.Ok(result);
 });
 
-studentDapperGroup.MapGet("/{studentId}", async Task<Results<Ok<Student>, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
+studentDapperGroup.MapGet("/ReadById/{studentId}", async Task<Results<Ok<Student>, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
 {
     try
     {
@@ -107,7 +107,7 @@ studentDapperGroup.MapGet("/{studentId}", async Task<Results<Ok<Student>, BadReq
     }
 });
 
-studentDapperGroup.MapPost("", async (Student student, IStudentRepository studentRepository) =>
+studentDapperGroup.MapPost("/Create", async (Student student, IStudentRepository studentRepository) =>
 {
     await studentRepository.DapperCreateAsync(student);
 
@@ -115,7 +115,7 @@ studentDapperGroup.MapPost("", async (Student student, IStudentRepository studen
 });
 
 
-studentDapperGroup.MapPut("", async Task<Results<Ok, BadRequest<string>>> (Student student, IStudentRepository studentRepository) =>
+studentDapperGroup.MapPut("/Update", async Task<Results<Ok, BadRequest<string>>> (Student student, IStudentRepository studentRepository) =>
 {
     try
     {
@@ -129,7 +129,7 @@ studentDapperGroup.MapPut("", async Task<Results<Ok, BadRequest<string>>> (Stude
     }
 });
 
-studentDapperGroup.MapDelete("/{studentId}", async Task<Results<Ok, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
+studentDapperGroup.MapDelete("/Delete/{studentId}", async Task<Results<Ok, BadRequest<string>>> (int studentId, IStudentRepository studentRepository) =>
 {
     try
     {
